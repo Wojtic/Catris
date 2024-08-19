@@ -19,9 +19,19 @@ var gameOver = false;
 var gameEdgeLeft = 150;
 var gameEdgeRight = 450;
 
+let gameHeight = 540;
+
 let images = [];
 
+let rotateBtn;
+let fallBtn;
+let leftBtn;
+let rightBtn;
 function preload() {
+  rotateBtn = loadImage("./textures/rotate.png", 30, 30);
+  fallBtn = loadImage("./textures/fall.png", 30, 30);
+  leftBtn = loadImage("./textures/left.png", 30, 30);
+  rightBtn = loadImage("./textures/right.png", 30, 30);
   for (let i = 0; i < 7; i++) {
     let curSet = [];
     for (let j = 0; j < 4; j++) {
@@ -32,7 +42,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(600, 540);
+  createCanvas(600, 700);
   angleMode(DEGREES);
 
   fallingPiece = new playPiece();
@@ -50,9 +60,11 @@ function draw() {
   //Right side info
   fill(25);
   noStroke();
-  rect(gameEdgeRight, 0, 150, height);
+  rect(gameEdgeRight, 0, 150, gameHeight);
   //Left side info
-  rect(0, 0, gameEdgeLeft, height);
+  rect(0, 0, gameEdgeLeft, gameHeight);
+
+  rect(0, 540, 600, 160);
 
   fill(colorBackground);
   //Score rectangle
@@ -107,11 +119,14 @@ function draw() {
   text(linesCleared, 560, 250);
 
   stroke(colorDark);
-  line(gameEdgeRight, 0, gameEdgeRight, height);
+  line(gameEdgeRight, 0, gameEdgeRight, gameHeight);
 
   fallingPiece.show();
 
-  if (keyIsDown(DOWN_ARROW)) {
+  if (
+    keyIsDown(DOWN_ARROW) ||
+    (mouseIsPressed && (mouseX - 300) ** 2 + (mouseY - 655) ** 2 < 900)
+  ) {
     updateEvery = 2;
   } else {
     updateEvery = updateEveryCurrent;
@@ -136,6 +151,11 @@ function draw() {
   if (gridWorkers.length > 0) {
     gridWorkers[0].work();
   }
+
+  image(rotateBtn, 300, 580, 70, 70);
+  image(leftBtn, 220, 650, 70, 70);
+  image(fallBtn, 300, 650, 70, 70);
+  image(rightBtn, 380, 650, 70, 70);
 
   //Game over text
   if (gameOver) {
@@ -176,6 +196,18 @@ function keyPressed() {
     }
     if (keyCode === UP_ARROW) {
       fallingPiece.input(UP_ARROW);
+    }
+  }
+}
+
+function mouseClicked() {
+  if (mouseY > 540) {
+    if ((mouseX - 300) ** 2 + (mouseY - 580) ** 2 < 900) {
+      fallingPiece.input(UP_ARROW);
+    } else if ((mouseX - 220) ** 2 + (mouseY - 655) ** 2 < 900) {
+      fallingPiece.input(LEFT_ARROW);
+    } else if ((mouseX - 380) ** 2 + (mouseY - 655) ** 2 < 900) {
+      fallingPiece.input(RIGHT_ARROW);
     }
   }
 }
@@ -344,7 +376,7 @@ function playPiece() {
       if (
         xx < gameEdgeLeft ||
         xx + gridSpace > gameEdgeRight ||
-        yy + gridSpace > height
+        yy + gridSpace > gameHeight
       ) {
         return true;
       }

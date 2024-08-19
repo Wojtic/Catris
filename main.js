@@ -25,7 +25,7 @@ function preload() {
   for (let i = 0; i < 7; i++) {
     let curSet = [];
     for (let j = 0; j < 4; j++) {
-      curSet.push(loadImage("/textures/" + i + "/" + j + ".png"));
+      curSet.push(loadImage("./textures/" + i + "/" + j + ".png"));
     }
     images.push(curSet);
   }

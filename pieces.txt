@@ -1,0 +1,26 @@
+0
+xxxx
+
+1
+x
+xxx
+
+2
+  x
+xxx
+
+3
+xx
+xx
+
+4
+ xx
+xx
+
+5
+ x
+xxx
+
+6
+xx
+ xx

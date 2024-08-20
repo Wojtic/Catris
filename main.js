@@ -27,6 +27,12 @@ let rotateBtn;
 let fallBtn;
 let leftBtn;
 let rightBtn;
+
+let music = new Audio("./audio/music.mp3");
+let meow = new Audio("./audio/meow.wav");
+let end = new Audio("./audio/end.mp3");
+let playedEnd = false;
+
 function preload() {
   rotateBtn = loadImage("./textures/rotate.png", 30, 30);
   fallBtn = loadImage("./textures/fall.png", 30, 30);
@@ -44,6 +50,10 @@ function preload() {
 function setup() {
   createCanvas(600, 700);
   angleMode(DEGREES);
+  music.play();
+  setInterval(() => {
+    music.play();
+  }, 85000);
 
   fallingPiece = new playPiece();
   fallingPiece.resetPiece();
@@ -159,6 +169,10 @@ function draw() {
 
   //Game over text
   if (gameOver) {
+    if (!playedEnd) {
+      end.play();
+      playedEnd = true;
+    }
     fill("#ffee6e");
     textSize(64);
     textAlign(CENTER);
@@ -570,6 +584,7 @@ function checkLines() {
     if (gridPieces[i].pos.y === runningY) {
       count++;
       if (count === 10) {
+        meow.play();
         //YEEHAW
         gridPieces.splice(runningIndex, 10);
 
